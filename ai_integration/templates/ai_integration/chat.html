@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fitness AI Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .chat-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+            width: 400px;
+        }
+        input[type=text] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+        button {
+            background: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #218838;
+        }
+        .answer-box {
+            background: #f1f1f1;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        .nav-links {
+            margin-top: 15px;
+            text-align: center;
+        }
+        .nav-links a {
+            margin: 0 8px;
+            text-decoration: none;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <h2>💪 Fitness AI Chatbot</h2>
+        
+        {% if not user_profile %}
+            <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 10px; border-radius: 5px; margin-bottom: 15px; color: #856404;">
+                ⚠️ <strong>Profile Incomplete:</strong> Complete your profile for personalized advice! 
+                <a href="{% url 'profile' %}" style="color: #007bff;">Complete Profile</a>
+            </div>
+        {% else %}
+            <div style="background: #d4edda; border: 1px solid #c3e6cb; padding: 10px; border-radius: 5px; margin-bottom: 15px; color: #155724;">
+                ✅ <strong>Profile Complete:</strong> Getting personalized advice based on your data!
+            </div>
+        {% endif %}
+        
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="question" placeholder="Ask me anything about fitness" required>
+            <button type="submit">Ask</button>
+        </form>
+
+        {% if answer %}
+            <div class="answer-box">
+                <strong>You:</strong> {{ question }}<br>
+                <strong>AI:</strong> {{ answer }}
+            </div>
+        {% endif %}
+
+        <div class="nav-links">
+            <a href="{% url 'home' %}">🏠 Home</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}">🚪 Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}">🔑 Login</a>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
